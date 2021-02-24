@@ -1,114 +1,99 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts;
+using Assets.Classes;
 using UnityEngine.UI;
+using System;
 
 public class DrawCards : MonoBehaviour
 {
-    public List<GameObject> GameObjectDeck;
-    public GameObject PlayerHand;
+    public GameObject cardPrefab;
+    public GameObject playerHand;
+    public GameObject opponentHand;
+    public GameObject opponentArea;
 
-    public GameObject OpponentHand;
-    public GameObject Canvas;
+    public List<Player> Players = new List<Player>();
+    public int NumberOfPlayers { get; } = 5;
 
-    private List<GameObject> _playerHandAreas = new List<GameObject>();
     private List<Card> _cardDeck = new List<Card>();
+    private List<GameObject> _playerHandAreas = new List<GameObject>();
 
+    private readonly int _deckSize = 52;
+    private readonly string _spritePath = "CardSprites/TempCards_";
     private bool _isHandDealt;
-
-    public int NumberOfPlayers = 5;
-    public int HandSize;
-
-    private List<Vector3> opponentHandPositions;
 
     void Start()
     {
-        opponentHandPositions = GenerateOpponentHandPositions(NumberOfPlayers - 1, 3.5f, 20);
-        _playerHandAreas.Add(PlayerHand);
+        GeneratePlayers();
+        _playerHandAreas.Add(playerHand);
         GenerateOpponentAreas();
         GenerateCards();
     }
 
+    private void GeneratePlayers()
+    {
+        for (int i = 0; i < NumberOfPlayers; i++)
+        {
+            Players.Add(new Player());
+        }
+    }
+
+    void Update()
+    {
+        
+    }
+
     public void StartGameClick()
     {
-        ShuffleCards(_cardDeck);
-
-        if (!_isHandDealt)
-        {
-            for (int i = 0; i < _cardDeck.Count; i++)
-            {
-                foreach (var playerArea in _playerHandAreas)
-                {
-                    if (i < _cardDeck.Count)
-                    {
-                        GameObject dealtCard = Instantiate(GameObjectDeck[_cardDeck[i].Index], Vector3.zero, Quaternion.identity);
-                        dealtCard.transform.SetParent(playerArea.transform);
-                        dealtCard.transform.localScale = new Vector3(1, 1, 1);
-                        _cardDeck[i].SetCardGameObject(dealtCard);
-                        i++;
-                    }
-                }
-            }
-            _isHandDealt = true;
-        }
-        else
-        {
-            foreach (var card in _cardDeck)
-            {
-                Destroy(card.CardGameObject);
-            }
-            
-            _isHandDealt = false;
-        }
+        DealCards();
     }
 
     private void GenerateOpponentAreas()
     {
         for (int i = 0; i < NumberOfPlayers - 1; i++)
         {
-            GameObject opponentHandArea = Instantiate(OpponentHand, opponentHandPositions[i], Quaternion.identity);
-            opponentHandArea.transform.SetParent(Canvas.transform);
-            opponentHandArea.transform.localScale = new Vector3(1, 1, 1);
+            GameObject opponentHandArea = Instantiate(opponentHand, Vector3.zero, Quaternion.identity);
+            opponentHandArea.transform.SetParent(opponentArea.transform, false);
             _playerHandAreas.Add(opponentHandArea);
         }
     }
 
-    private List<Vector3> GenerateOpponentHandPositions(int numberOfOpponents, float height, float maxWidth)
-    {
-        List<Vector3> handPositions = new List<Vector3>();
-
-        float xInterval = maxWidth / (numberOfOpponents + 1);
-        float xPosition = -(maxWidth / 2) + xInterval;
-
-        for (int i = 0; i < numberOfOpponents; i++)
-        {
-            handPositions.Add(new Vector3(xPosition, height, 0));
-            xPosition += xInterval;
-        }
-
-        return handPositions;
-    }
-
     private void GenerateCards()
     {
-        for (int i = 0; i < GameObjectDeck.Count; i++)
+        for (int i = 0; i < _deckSize; i++)
         {
+            string path = _spritePath + i;
+            SpriteRenderer cardSpriteRenderer = Resources.Load<SpriteRenderer>(path);
+
             _cardDeck.Add(new Card(i));
+            _cardDeck[i].CardGameObject = Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+            _cardDeck[i].CardGameObject.GetComponent<Image>().sprite = cardSpriteRenderer.sprite;
         }
     }
 
-    private static void ShuffleCards<T>(IList<T> deck)
+    private void DealCards()
     {
-        int count = deck.Count;
-        int last = count - 1;
+        CardManager.ShuffleCards(_cardDeck);
 
-        for (int i = 0; i < last; i++)
+        if (!_isHandDealt)
         {
-            var r = Random.Range(i, count);
-            var buffer = deck[i];
-            deck[i] = deck[r];
-            deck[r] = buffer;
+            for (int i = 0; i < _cardDeck.Count; i++)
+            {
+                for (int j = 0; j < Players.Count; j++)
+                {
+                    if (i < _cardDeck.Count)
+                    {
+                        GameObject dealtCard = Instantiate(_cardDeck[i].CardGameObject, Vector3.zero, Quaternion.identity);
+                        dealtCard.transform.SetParent(_playerHandAreas[j].transform);
+                        Players[j].DealCard(_cardDeck[i]);
+                        i++;
+                    }
+
+                    i--;
+                }
+            }
+
+            _isHandDealt = true;
         }
     }
 }
