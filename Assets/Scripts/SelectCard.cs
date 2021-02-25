@@ -4,37 +4,42 @@ using UnityEngine;
 
 public class SelectCard : MonoBehaviour
 {
-    public GameObject PlayArea;
+    public GameObject MainPlayArea;
 
-    private bool _isSelected;
+    public bool IsSelected { get; set; }
     private bool _isPositionStored;
     private readonly Vector2 _hoverOffset = new Vector2(0, 15);
     private Vector2 _initialPosition;
 
+    public bool IsPlayable { get; set; }
+
     public void OnHover()
     {
-        if (!_isPositionStored)
+        if (IsPlayable)
         {
-            _initialPosition = transform.position;
-            _isPositionStored = true;
+            if (!_isPositionStored)
+            {
+                _initialPosition = transform.position;
+                _isPositionStored = true;
+            }
+
+            transform.position = _initialPosition + _hoverOffset;
         }
-        
-        transform.position = _initialPosition + _hoverOffset;
     }
 
     public void ExitHover()
     {
-        if (!_isSelected)
+        if (!IsSelected && IsPlayable)
             transform.position = _initialPosition;
     }
 
     public void OnSelect()
     {
-        if (!_isSelected)
-            _isSelected = true;
+        if (!IsSelected && IsPlayable)
+            IsSelected = true;
         else
         {
-            _isSelected = false;
+            IsSelected = false;
             ExitHover();
         }
     }
