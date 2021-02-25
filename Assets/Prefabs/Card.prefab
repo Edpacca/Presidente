@@ -88,7 +88,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571e2fdb89bec354d84dc4f20da96cdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayArea: {fileID: 898398767676624013, guid: eba897d6512456b4c8ec5712038a8514, type: 3}
+  MainPlayArea: {fileID: 898398767676624013, guid: eba897d6512456b4c8ec5712038a8514,
+    type: 3}
 --- !u!114 &-6587736417354169453
 MonoBehaviour:
   m_ObjectHideFlags: 0
