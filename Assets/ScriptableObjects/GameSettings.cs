@@ -1,20 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GameSettings", menuName = "Settings/GameSettings")]
+[CreateAssetMenu(fileName="GameSettings", menuName ="Controllers/GameSettings")]
 public class GameSettings : ScriptableObject
 {
-    private const int singleDeckSize = 52;
-    public int numberOfPlayers = 5;
-    public int numberOfDecks = 1;
-    public int DeckSize { get => singleDeckSize * numberOfDecks; }
+    public int numberOfPlayers = 3;
+    public readonly int deckSize = 52;
+    public static readonly int startCardIndex = 27;
 
-    public int DeckIndex(int index)
+    public void SetNumberOfPlayers(string newValue)
     {
-        return index % singleDeckSize;
+        numberOfPlayers = Convert.ToInt32(newValue);
     }
-
-    public Color32 activePlayColour = new Color(1.000f, 0.600f, 0.000f, 0.250f);
-    public Color32 defaultAreaColour = new Color(1.000f, 1.000f, 1.000f, 0.250f);
 }

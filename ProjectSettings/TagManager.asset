@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Card
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -14,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - Cards
+  - Card
   - 
   - 
   - 
@@ -41,13 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Board
-    uniqueID: 463026477
-    locked: 0
-  - name: Hand
-    uniqueID: 1352630487
-    locked: 0
-  - name: Interface
-    uniqueID: 2137175539
     locked: 0
