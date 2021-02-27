@@ -77,7 +77,7 @@ public class NewGameSetup : MonoBehaviour
 
         for (int i = 0; i < _deckSize; i++)
         {
-            Card card0 = GenerateCard(_deck.cards[i], localPlayerCard, localPlayerHand);
+            Card card0 = GeneratePlayerCard(_deck.cards[i], localPlayerCard, localPlayerHand);
             gameController.DealCardToPlayer(0, card0);
             i++;
 
@@ -100,6 +100,20 @@ public class NewGameSetup : MonoBehaviour
         cardObject.transform.SetParent(parentObject.transform);
         cardObject.GetComponent<CardScript>().card = card;
         cardObject.GetComponent<Image>().sprite = card.cardSprite;
+
+        return card;
+    }
+
+    private Card GeneratePlayerCard(int index, GameObject prefab, GameObject parentObject)
+    {
+        Card card = ScriptableObject.CreateInstance<Card>();
+        card.Initialise(index);
+
+        card.cardSprite = cardSprites[index];
+        GameObject cardObject = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+        cardObject.transform.SetParent(parentObject.transform);
+        cardObject.GetComponent<CardScript>().card = card;
+        cardObject.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = card.cardSprite;
 
         return card;
     }
