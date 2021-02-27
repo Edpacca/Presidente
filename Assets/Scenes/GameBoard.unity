@@ -802,7 +802,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 70, y: 98}
-  m_Spacing: {x: -20, y: 0}
+  m_Spacing: {x: -30, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
 --- !u!114 &2031921904
@@ -857,6 +857,12 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 3525900734784082450, guid: 81370295b22fca14288271372b2b3b61,
         type: 3}
+      propertyPath: localPlayerCard
+      value: 
+      objectReference: {fileID: 6111904920724166675, guid: 96056e92fd365a742ac37205c17a5a25,
+        type: 3}
+    - target: {fileID: 3525900734784082450, guid: 81370295b22fca14288271372b2b3b61,
+        type: 3}
       propertyPath: localPlayerHand
       value: 
       objectReference: {fileID: 2031921901}
@@ -870,6 +876,12 @@ PrefabInstance:
       propertyPath: opponentHandsArea
       value: 
       objectReference: {fileID: 1463956256}
+    - target: {fileID: 3525900734784082450, guid: 81370295b22fca14288271372b2b3b61,
+        type: 3}
+      propertyPath: localPlayerCardParent
+      value: 
+      objectReference: {fileID: 1584544350303241990, guid: 8a184232c9b44b84ba49dbf1ae27b0a3,
+        type: 3}
     - target: {fileID: 3525900734784082451, guid: 81370295b22fca14288271372b2b3b61,
         type: 3}
       propertyPath: m_RootOrder
