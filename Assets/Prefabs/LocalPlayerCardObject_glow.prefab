@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardGlow: {fileID: 8969654805952067972}
+  cardScript: {fileID: 1310514847737582996}
 --- !u!1 &3453070168413265414
 GameObject:
   m_ObjectHideFlags: 0
