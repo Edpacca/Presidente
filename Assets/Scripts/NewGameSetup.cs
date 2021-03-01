@@ -10,17 +10,23 @@ public class NewGameSetup : MonoBehaviour
     public GameController gameController;
     public GameLoop gameLoop;
 
+    // Scene objects
     public GameObject opponentHandsArea;
     public GameObject localPlayerHand;
+    public GameObject localPlayerUi;
+
+    // Prefabs
+    public GameObject playerUiPrefab;
+    public GameObject localPlayerCardPrefab;
     public GameObject opponentHandPrefab;
+    public GameObject opponentCardPrefab;
+
     private List<GameObject> _playerHands;
-
-    public GameObject localPlayerCard;
-    public GameObject opponentCard;
-
-    private readonly string _cardSpriteFilePath = "CardSprites/TempCards";
+    private List<GameObject> _playerUis;
+    private List<Player> _players;
     private Sprite[] cardSprites;
     private Deck _deck;
+    private readonly string _cardSpriteFilePath = "CardSprites/TempCards";
     private int _deckSize;
 
     private void Start()
@@ -31,7 +37,9 @@ public class NewGameSetup : MonoBehaviour
 
     private void Initialise()
     {
+        _players = new List<Player>();
         _playerHands = new List<GameObject>();
+        _playerUis = new List<GameObject>();
         _deckSize = gameSettings.deckSize;
         _deck = new Deck(_deckSize);
         cardSprites = Resources.LoadAll<Sprite>(_cardSpriteFilePath);
@@ -42,22 +50,24 @@ public class NewGameSetup : MonoBehaviour
         Initialise();
         int numberOfPlayers = gameSettings.numberOfPlayers;
         GeneratePlayers(numberOfPlayers);
-        GeneratePlayAreas(numberOfPlayers);
         DealCards(numberOfPlayers);
         gameLoop.gameState = GameState.boardLoaded;
+        gameController.StartPlay();
     }
 
     private void GeneratePlayers(int numberOfPlayers)
     {
-        List<Player> players = new List<Player>();
         _playerHands.Add(localPlayerHand);
+        _playerUis.Add(localPlayerUi);
+        GeneratePlayAreas(numberOfPlayers);
 
         for (int i = 0; i < numberOfPlayers; i++)
         {
-            players.Add(ScriptableObject.CreateInstance<Player>());
+            _players.Add(ScriptableObject.CreateInstance<Player>());
+            _players[i].Initialise(_playerHands[i], _playerUis[i]);
         }
 
-        gameController.AssignPlayers(players);
+        gameController.AssignPlayers(_players);
     }
 
     private void GeneratePlayAreas(int numberOfPlayers)
@@ -66,8 +76,11 @@ public class NewGameSetup : MonoBehaviour
         for (int i = 0; i < numberOfPlayers - 1; i++)
         {
             GameObject handArea = Instantiate(opponentHandPrefab, Vector3.zero, Quaternion.identity);
+            GameObject playerUi = Instantiate(playerUiPrefab, Vector3.zero, Quaternion.identity);
             handArea.transform.SetParent(opponentHandsArea.transform);
+            playerUi.transform.SetParent(opponentHandsArea.transform);
             _playerHands.Add(handArea);
+            _playerUis.Add(playerUi);
         }
     }
 
@@ -77,20 +90,22 @@ public class NewGameSetup : MonoBehaviour
 
         for (int i = 0; i < _deckSize; i++)
         {
-            Card card0 = GeneratePlayerCard(_deck.cards[i], localPlayerCard, localPlayerHand);
+            GameObject card0 = GeneratePlayerCard(_deck.cards[i], localPlayerCardPrefab, localPlayerHand);
             gameController.DealCardToPlayer(0, card0);
             i++;
 
             for (int j = 1; j < numberOfPlayers && i < _deckSize; j++, i++)
             {
-                Card card1 = GenerateCard(_deck.cards[i], opponentCard, _playerHands[j]);
+                GameObject card1 = GenerateCard(_deck.cards[i], opponentCardPrefab, _playerHands[j]);
                 gameController.DealCardToPlayer(j, card1);
             }
             i--;
         }
+
+        UpdateCardsInHand();
     }
 
-    private Card GenerateCard(int index, GameObject prefab, GameObject parentObject)
+    private GameObject GenerateCard(int index, GameObject prefab, GameObject parentObject)
     {
         Card card = ScriptableObject.CreateInstance<Card>();
         card.Initialise(index);
@@ -101,10 +116,10 @@ public class NewGameSetup : MonoBehaviour
         cardObject.GetComponent<CardScript>().card = card;
         cardObject.GetComponent<Image>().sprite = card.cardSprite;
 
-        return card;
+        return cardObject;
     }
 
-    private Card GeneratePlayerCard(int index, GameObject prefab, GameObject parentObject)
+    private GameObject GeneratePlayerCard(int index, GameObject prefab, GameObject parentObject)
     {
         Card card = ScriptableObject.CreateInstance<Card>();
         card.Initialise(index);
@@ -115,6 +130,14 @@ public class NewGameSetup : MonoBehaviour
         cardObject.GetComponent<CardScript>().card = card;
         cardObject.transform.GetChild(1).gameObject.GetComponent<Image>().sprite = card.cardSprite;
 
-        return card;
+        return cardObject;
+    }
+
+    private void UpdateCardsInHand()
+    {
+        foreach (var player in _players)
+        {
+            player.UpdateHandSize();
+        }
     }
 }
