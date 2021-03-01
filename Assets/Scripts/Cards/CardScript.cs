@@ -5,5 +5,6 @@ using UnityEngine;
 public class CardScript : MonoBehaviour
 {
     public Card card;
-    public bool isPlayable;
+    public bool isPlayable = false;
+    public bool isPlayed = false;
 }

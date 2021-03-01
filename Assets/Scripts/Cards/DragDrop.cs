@@ -29,7 +29,8 @@ public class DragDrop : MonoBehaviour
         if (_initialPosition == null)
             StoreCardPosition();
 
-        _isDragging = true;
+        if (cardScript.isPlayable)
+            _isDragging = true;
     }
 
     public void OnCardDrop()
@@ -62,15 +63,16 @@ public class DragDrop : MonoBehaviour
     {
         if (mainPlayArea != null)
         {
-            PlayAreaScript script = mainPlayArea.GetComponent<PlayAreaScript>();
+            PlayAreaScript playeArea = mainPlayArea.GetComponent<PlayAreaScript>();
             Card card = cardScript.card;
 
-            if (Playable.isValidPlay(card.Value, script.lastPlayedValue))
+            if (Playable.isValidPlay(card.Value, playeArea.lastPlayedValue))
             {
-                script.PlayCard(cardScript.card);
+                playeArea.PlayCard(cardScript.card);
                 transform.SetParent(null, false);
                 transform.position = Vector3.zero;
                 gameObject.SetActive(false);
+                cardScript.isPlayed = true;
             }
             else
             {

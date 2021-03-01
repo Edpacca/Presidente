@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CardGlow : MonoBehaviour
 {
     public Image cardGlow;
+    public CardScript cardScript;
 
     void Start()
     {
@@ -14,11 +15,13 @@ public class CardGlow : MonoBehaviour
 
     public void OnEnterHover()
     {
-        cardGlow.enabled = true;
+        if (cardScript.isPlayable)
+            cardGlow.enabled = true;
     }
 
     public void OnExitHover()
     {
-        cardGlow.enabled = false;
+        if (cardScript.isPlayable)
+            cardGlow.enabled = false;
     }
 }
