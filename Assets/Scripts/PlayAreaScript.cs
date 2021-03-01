@@ -11,6 +11,7 @@ public class PlayAreaScript : MonoBehaviour
 
     public Image image;
     public Text lastPlayedValueText;
+    public GameController gameController;
 
     private void Update()
     {
@@ -32,6 +33,7 @@ public class PlayAreaScript : MonoBehaviour
     {
         SetNewSprite(card.cardSprite);
         lastPlayedValue = card.Value;
+        gameController.TurnTaken();
     }
 
     public void UpdateText()
