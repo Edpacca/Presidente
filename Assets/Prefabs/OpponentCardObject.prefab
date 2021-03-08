@@ -92,7 +92,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 11400000, guid: bd4e10cfd2466794ab2d54688b6180d7, type: 2}
+  image: {fileID: 5708379617923196108}
   isPlayable: 0
+  isPlayed: 0
 --- !u!114 &699910109570531038
 MonoBehaviour:
   m_ObjectHideFlags: 0

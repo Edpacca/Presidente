@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.48584908, b: 0.48584908, a: 1}
+  m_Color: {r: 0.48627448, g: 0.7913217, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -153,8 +153,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3660788693817425301, guid: 82b4983a8f1baf343ae9785175cf4708,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 695036e5cdfb75348a6d1d8f631c1fb4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -228,7 +227,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 0}
+  image: {fileID: 6061688847985226301}
   isPlayable: 0
+  isPlayed: 0
 --- !u!114 &6910157431255145941
 MonoBehaviour:
   m_ObjectHideFlags: 0
