@@ -11,5 +11,9 @@ namespace Assets
         inMenu = 0,
         newGame = 1,
         boardLoaded = 2,
+        newRound = 3,
+        inPlay = 4,
+        roundOver = 5,
+        gameOver = 6
     }
 }
