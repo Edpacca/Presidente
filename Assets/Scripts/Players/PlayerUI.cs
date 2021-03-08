@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets;
 
 public class PlayerUI : MonoBehaviour
 {
     public Text cardsInHand;
     public Text playerName;
-    private GameObject _handArea;
+    private bool _isPassed;
+    private string _playerName;
 
-    public void Initialise(GameObject handArea)
+    private void OnEnable()
     {
-        _handArea = handArea;
+        _playerName = playerName.text;
     }
 
     public void UpdateCardsInHand(int number)
@@ -24,4 +26,25 @@ public class PlayerUI : MonoBehaviour
         playerName.text = name;
     }
 
+    public void PassTurn(bool isPassed)
+    {
+        _isPassed = isPassed;
+
+        if (_isPassed)
+        {
+            playerName.text = "PASSED";
+            playerName.color = GameResources.playerRed;
+        }
+        else
+        {
+            playerName.text = _playerName;
+            playerName.color = GameResources.playerGold;
+        }
+    }
+
+    public void SetOutOfGame()
+    {
+        playerName.text = "OUT!";
+        playerName.color = GameResources.playerGreen;
+    }
 }
