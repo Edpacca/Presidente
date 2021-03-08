@@ -68,11 +68,11 @@ public class DragDrop : MonoBehaviour
 
             if (Playable.isValidPlay(card.Value, playeArea.lastPlayedValue))
             {
-                playeArea.PlayCard(cardScript.card);
                 transform.SetParent(null, false);
                 transform.position = Vector3.zero;
                 gameObject.SetActive(false);
                 cardScript.isPlayed = true;
+                playeArea.PlayCard(cardScript.card);
             }
             else
             {
