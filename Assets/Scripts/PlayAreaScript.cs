@@ -15,10 +15,7 @@ public class PlayAreaScript : MonoBehaviour
 
     private void Update()
     {
-        if (lastPlayedValue > 13)
-        {
-            BurnCardsInPlay();
-        }
+
 
         UpdateText();
     }
@@ -33,7 +30,7 @@ public class PlayAreaScript : MonoBehaviour
     {
         SetNewSprite(card.cardSprite);
         lastPlayedValue = card.Value;
-        gameController.TurnTaken();
+        CheckForBurn();
     }
 
     public void UpdateText()
@@ -67,6 +64,17 @@ public class PlayAreaScript : MonoBehaviour
     {
         lastPlayedValue = 0;
         SetNewSprite(null);
-        image.color = Color.gray;
+        image.color = GameResources.alphaWhite40;
+    }
+
+    private void CheckForBurn()
+    {
+        if (lastPlayedValue > 13)
+        {
+            BurnCardsInPlay();
+            gameController.WinningPlayMade();
+        }
+        else
+            gameController.PlayMade();
     }
 }
